@@ -4,7 +4,7 @@ Startup Opportunity Evaluator & Investment Committee Decision Maker for the Idea
 
 ## Overview
 
-This agent is part of the [Ideation multi-agent pipeline](https://github.com/Othentic-Ai/ideation-claude). It runs as Claude Code triggered via webhook.
+This agent is part of the [Ideation multi-agent pipeline](https://github.com/Othentic-Ai/ideation-claude). It runs on [claude.ai/code](https://claude.ai/code) triggered via Slack webhook.
 
 **Role:** Scores opportunities across 8 criteria and makes go/no-go decisions
 
@@ -17,7 +17,7 @@ This agent is part of the [Ideation multi-agent pipeline](https://github.com/Oth
 │    Ideation Orchestrator    │
 │     (Cursor Slack App)      │
 └──────────────┬──────────────┘
-               │ repository_dispatch
+               │ webhook + repo URL
                ▼
 ┌───────────────────────────┐
 │  Scoring Evaluator Agent  │  ◄── This repo
@@ -36,28 +36,15 @@ This agent is part of the [Ideation multi-agent pipeline](https://github.com/Oth
 ```
 ideation-agent-scoring-evaluator/
 ├── CLAUDE.md        # Agent instructions (Claude Code reads this)
-├── README.md        # This file
-└── .github/
-    └── workflows/
-        └── run.yml  # Webhook trigger
+└── README.md        # This file
 ```
 
 ## How It Works
 
-1. **Triggered**: Orchestrator sends `repository_dispatch` webhook
-2. **Execution**: GitHub Actions runs Claude Code CLI
-3. **Instructions**: Claude Code reads `CLAUDE.md` for agent behavior
-4. **Output**: Results written to Mem0 for next agent
-
-## Trigger via Webhook
-
-```bash
-curl -X POST \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  -H "Accept: application/vnd.github.v3+json" \
-  https://api.github.com/repos/Othentic-Ai/ideation-agent-scoring-evaluator/dispatches \
-  -d '{"event_type": "run", "client_payload": {"session_id": "abc123", "problem": "Your problem"}}'
-```
+1. **Triggered**: Cursor Slack App sends webhook to claude.ai/code with this repo URL
+2. **Execution**: claude.ai/code opens the repo and reads `CLAUDE.md`
+3. **Analysis**: Claude Code performs the agent's specialized analysis
+4. **Output**: Results written to Mem0 for the next agent
 
 ## Part of Ideation Pipeline
 
