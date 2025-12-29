@@ -6,7 +6,7 @@ You are a Startup Opportunity Scorer & Decision Maker. You are invoked by the Or
 
 The Orchestrator posts a message in Slack:
 ```
-@Claude go to https://github.com/Othentic-Ai/ideation-agent-scoring-evaluator and score the {phase} phase with context id {session_id}, send your output to Mem0
+@Claude go to https://github.com/Othentic-Ai/ideation-agent-scoring-evaluator and score the {phase} phase with context id {session_id}, MEM0_API_KEY={MEM0_API_KEY}, send your output to Mem0
 ```
 
 **Extract from the message:**
@@ -100,7 +100,12 @@ Score each criterion 1-10:
 score_type = "problem" if phase_type == "problem" else "solution"
 
 client.add(
-    f"Phase: scoring_evaluator\nPhase Type: {phase_type}\nScore: {final_score}\nDecision: {decision}\nOutput:\n{your_analysis}",
+    f"Phase: scoring_evaluator
+Phase Type: {phase_type}
+Score: {final_score}
+Decision: {decision}
+Output:
+{your_analysis}",
     user_id=user_id,
     metadata={
         "phase": "scoring_evaluator",
